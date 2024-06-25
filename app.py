@@ -15,21 +15,26 @@ mysql = MySQL(app)
 
 @app.route('/add', methods=['POST'])
 def add_equipment():
-    data = request.get_json()
-    serial = data['serial']
-    Type = data['type']
-    brand = data['brand']
-    purchase_date = data['purchase_date']
-    location = data['location']
-    status = data['status']
-    notes = data['status']
+    try:
+        data = request.get_json()
+        serial = data['serial']
+        Type = data['type']
+        brand = data['brand']
+        purchase_date = data['purchase_date']
+        location = data['location']
+        status = data['status']
+        notes = data['notes']
 
-    cur = mysql.connection.cursor()
-    cur.execute("INSERT INTO ict (serial_num, type, brand, purchase_date, office_located, status, notes) VALUES (%s, %s, %s, %s, %s, %s, %s)", (serial, Type, brand, purchase_date, location, status, notes))
-    mysql.connection.commit()
-    cur.close
+        cur = mysql.connection.cursor()
+        cur.execute("INSERT INTO ict (serial_num, type, brand, purchase_date, office_located, status, notes) VALUES (%s, %s, %s, %s, %s, %s, %s)", (serial, Type, brand, purchase_date, location, status, notes))
+        mysql.connection.commit()
+        cur.close
 
-    return 'Equipment added', 200
+        return 'Equipment added', 200
+    
+    except Exception as e:
+        return str(e), 400
+
 
 @app.route('/equipments', methods=['GET'])
 def get_equipments():
@@ -45,18 +50,23 @@ def get_equipments():
                 'serial': row[1],
                 'type': row[2],
                 'brand': row[3],
-                'purcahse_date': row[4],
+                'purchase_date': row[4],
                 'location': row[5],
                 'status': row[6],
                 'notes': row[7]
                 }
         equipments.append(equipment)
-    
     return jsonify(equipments), 200
 
+
+@app.route('/')
 @app.route('/table')
 def table():
-    render_template('table.html')
+    return render_template('table.html')
+
+@app.route('/form')
+def form():
+    return render_template('form.html')
 
 
 if __name__ == '__main__':
