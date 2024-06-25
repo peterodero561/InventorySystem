@@ -9,7 +9,7 @@
 ## 3. Database to store the records inserted in the Inventory
 ![mysql image](https://github.com/peterodero561/InventorySystem/blob/main/images/db.png)
 
-### code to set uo your data base
+### code to set up your data base
 ```sql
 CREATE DATABASE inventory;
 
